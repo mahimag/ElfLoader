@@ -1,0 +1,54 @@
+#include <elf.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+
+void usage(){
+        fprintf(stderr, "Usage: ./elfloader filename arg1 arg2\n");
+}
+
+int main(int argc, char**argv){ // num arguments, arguments themselves
+        //check if command line arguments are valid
+
+        int fd = 0;
+//      read(fd, argv[1], 0);
+
+        if(argc != 4){
+                usage();
+                exit(1);
+        }
+        else{
+                FILE* fp = fopen(argv[1], "rb");
+                if(fp == NULL){
+			perror("fopen");
+                        exit(2);
+                }
+		struct ElfN_Ehdr ehdr;
+		fread(ehdr.e_ident[0])
+		unsigned char buffer[4];
+		//read the header from the elf file
+		size_t ret = fread(ehdr, sizeof(ELfN_Ehdr), ARRAY_SIZE(ElfN_Ehdr), fp);
+           	if (ret != ARRAY_SIZE(buffer)) {
+               		fprintf(stderr, "fread() failed: %zu\n", ret);
+               		exit(EXIT_FAILURE);
+           	}
+           	printf("ELF magic: %#04x%02x%02x%02x\n", buffer[0], buffer[1], buffer[2], buffer[3]);
+		printf("ELF? %d  %d  %d \n", buffer[4], buffer[5], buffer[6]);
+
+		fclose(fp);
+
+		exit(0);
+        }
+
+	return 0;
+
+        //ssize_t size = read(fd, argv[1], 0);
+        //printf("Answer=%d\n", answer);
+
+        //return unsigned int
+}
+
+/*     void* codep = mmap(NULL, memsz, PROT_READ | PROT_WRITE | PROT_EXEC,
+            MAP_ANONYMOUS | MAP_PRIVATE, 0, 0) 
+*/

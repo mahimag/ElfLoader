@@ -1,0 +1,63 @@
+#include <elf.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+void usage(){
+	//prints error to stderr
+	fprintf(stderr, "Usage: ./elfloader filename arg1 arg2\n");
+        //printf("Usage bla bla bla\n");
+}
+
+int main(int argc, char**argv){ // num arguments, arguments themselves
+
+	//variables
+	int fd = 0;
+
+        //check if command line arguments are valid
+
+        if(argc != 4){
+	//prints error to stderr
+                usage();
+                exit(1);
+        }
+        else{
+	//read/open a file in binary mode
+                FILE* fp = fopen(argv[1], "rb");
+		struct ElfN_Ehdr ehdr;
+		fread(fd, buf, ehdr.e_ehsize);
+                if(fp == NULL){
+			perror("fopen");
+                        exit(2);
+                }
+                usage();
+        }
+
+
+        read(fd, argv[1], 0);
+
+        //ssize_t size = read(fd, argv[1], 0);
+        //printf("Answer=%d\n", answer);
+
+
+
+        //return unsigned int
+}
+
+/*     void* codep = mmap(NULL, memsz, PROT_READ | PROT_WRITE | PROT_EXEC,
+            MAP_ANONYMOUS | MAP_PRIVATE, 0, 0) 
+*/
+
+/*
+	tips:
+	- Elf64_Ehdr will be used
+	- Variable in program header tells you where magic num is: p_offset (use fseek)
+	- pseudocode:
+		- Read in Elf Header
+		- Use e_phoff to seek to program header
+		- Read in program header
+		- Allocate memory for the loadable code
+		- Use p_offset to seek to loadable code
+		- Read in loadable code to allocated memory
+		- Execute the code (found in google doc)
+*/

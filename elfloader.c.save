@@ -1,0 +1,125 @@
+// structure of an ELF file
+/*
+	ELF header
+	Program header table
+	.text
+	.rodata
+	...
+	.data
+	Section header table
+
+//
+        #define EI_NIDENT 16
+
+        typedef struct {
+               unsigned char e_ident[EI_NIDENT];
+               uint16_t      e_type;
+	       uint16_t      e_machine;
+               uint32_t      e_version;
+               ElfN_Addr     e_entry;
+               ElfN_Off      e_phoff;
+               ElfN_Off      e_shoff;
+               uint32_t      e_flags;
+               uint16_t      e_ehsize;
+               uint16_t      e_phentsize;
+               uint16_t      e_phnum;
+               uint16_t      e_shentsize;
+               uint16_t      e_shnum;
+               uint16_t      e_shstrndx;
+        } Elf64_Ehdr;
+
+// we must write a loader that
+1. reads a file
+2. 
+
+*/
+
+#include <elf.h>
+#include <stdio.h>
+
+void usage(){
+        printf("Usage bla bla bla\n");
+}
+
+bool read_header (){
+        if(fread(elf, sizeof(elf_hdr_t* elf), 1, fp) != 1){
+                return false;
+        }
+        return true;
+}
+int main(int argc, char**argv){ // num arguments, arguments themselves
+        //check if command line arguments are valid
+
+        int fd = 0;
+        read(fd, argv[1], 0);
+
+        if(argc != 4){
+                usage();
+                exit(1);
+        }
+        else{
+                FILE* fp = fopen(argv[1], "rb");
+                if(fp == NULL){
+                        printf("Cant open\n");
+                        exit(2);
+                }
+                else{
+
+                }
+                usage();
+        }
+
+        int fd = 0;
+        //ssize_t size = read(fd, argv[1], 0);
+        //printf("Answer=%d\n", answer);
+
+
+
+        //return unsigned int
+}
+
+/*     void* codep = mmap(NULL, memsz, PROT_READ | PROT_WRITE | PROT_EXEC,
+            MAP_ANONYMOUS | MAP_PRIVATE, 0, 0) 
+*/
+
+
+/*
+
+e_ident
+              This array of bytes specifies how to interpret the file,
+              independent of the processor or the file's remaining
+              contents.  Within this array everything is named by
+              macros, which start with the prefix EI_ and may contain
+              values which start with the prefix ELF.  The following
+              macros are defined:
+
+              EI_MAG0
+                     The first byte of the magic number.  It must be
+                     filled with ELFMAG0.  (0: 0x7f)
+
+              EI_MAG1
+                     The second byte of the magic number.  It must be
+                     filled with ELFMAG1.  (1: 'E')
+
+              EI_MAG2
+                     The third byte of the magic number.  It must be
+                     filled with ELFMAG2.  (2: 'L')
+
+              EI_MAG3
+                     The fourth byte of the magic number.  It must be
+                     filled with ELFMAG3.  (3: 'F')
+
+*/
+
+
+//1. Check that the command line arguments are valid. If not valid, print the usage and quit.
+  2. Read the given file. Make sure you open the file for reading in binary mode. Executable files are not text files. If you don't open it in binary mode, then odd things can happen as binary is interpreted as text.
+  3. Confirm that the file is an ELF file by checking that the file has a magic 0x7F and ELF as the first four bytes.
+  4. Read the program header table. You can move around in a file by using fseek() to get to the correct location in the file where the program header exists.
+  5. The program header will tell you where the loadable segments are in the ELF file, and how large they are.
+  6. Allocate memory in your program that can hold the executable code from the ELF file.
+  7. Load the executable loadable section into memory at the right locations. Do this by reading the ELF file at the right location, and copying those bytes into the previously allocated memory.
+  8. Now that the program is loaded into memory, we have to run it.
+  9. Jump into the entry point specified in the ELF header to start executing the program.
+  10. The entry point will be at the given offset that was specified in the headers from the start of the allocated memory segment.
+  11. Print the answer that comes back as printf("Answer=%d\n" answer);
